@@ -672,6 +672,8 @@ void QtWindow::writeSettings()
     m_settings->writeSettings();
 }
 
+
+
 void QtWindow::closeEvent(QCloseEvent *event)
 {
     if (m_song->playingMusic())
@@ -680,7 +682,17 @@ void QtWindow::closeEvent(QCloseEvent *event)
     }
 
     writeSettings();
+    event->accept();
+    QCoreApplication::quit();   // make sure the event loop ends
 }
+
+
+
+
+
+
+
+
 
 void QtWindow::keyPressEvent ( QKeyEvent * event )
 {
