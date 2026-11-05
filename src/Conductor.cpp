@@ -675,7 +675,12 @@ void CConductor::pianistInput(CMidiEvent inputNote)
                 goodSound = false;
 
                 m_piano->addPianistNote(hand, inputNote, false);
+
                 m_rating.wrongNotes(1);
+                setEventBits(EVENT_BITS_forceRatingRedraw);
+
+
+
 
                 if (m_settings->followThroughErrors() && m_playMode == PB_PLAY_MODE_followYou) // If the setting is checked, errors cause following too
                   {

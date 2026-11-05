@@ -56,6 +56,25 @@ public:
         return percent;
     }
 
+
+    int correctNoteCount()
+    {
+        int correct = m_totalNotesCount - m_lateNoteCount;
+        return (correct < 0) ? 0 : correct;
+    }
+
+    // correct / (correct + wrong + late) * 100
+    double accuracyPercent()
+    {
+        int correct = correctNoteCount();
+        int denominator = correct + m_wrongNoteCount + m_lateNoteCount;
+        if (denominator <= 0)
+            return 100.0;   // nothing played yet
+        return (correct * 100.0) / denominator;
+    }
+
+
+
     void calculateAccuracy();
 
     float getAccuracyValue(){ return m_currentAccuracy; }

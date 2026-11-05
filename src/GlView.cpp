@@ -198,7 +198,37 @@ void CGLView::drawAccurracyBar()
     glVertex2f (x+ width, y  + lineWidth);
     glVertex2f (x + width, y - lineWidth);
     glVertex2f (x, y - lineWidth);
-    glEnd();
+    glEnd();       // ---- Live note statistics shown to the right of the bar ----
+    {
+        const float textX = x + width + 12;
+        const float availableWidth = Cfg::getAppWidth() - textX - 4;
+
+        const double pct = m_rating->accuracyPercent();
+        const QString pctText = QString::number(pct, 'f', 1);
+
+        QString text = QString("Notes: %1  Wrong: %2  Late: %3  Accuracy: %4%")
+                .arg(m_rating->correctNoteCount())
+                .arg(m_rating->wrongNoteCount())
+                .arg(m_rating->lateNoteCount())
+                .arg(pctText);
+
+        QFontMetrics fm(m_timeRatingFont);
+        if (fm.boundingRect(text).width() > availableWidth)
+        {
+            // Not enough room: abbreviate to first letters
+            text = QString("N:%1  W:%2  L:%3  A:%4%")
+                    .arg(m_rating->correctNoteCount())
+                    .arg(m_rating->wrongNoteCount())
+                    .arg(m_rating->lateNoteCount())
+                    .arg(pctText);
+        }
+
+        // Erase the old text, then draw the new
+        CDraw::drColor (Cfg::backgroundColor());
+        glRectf(textX - 2, y - 10, Cfg::getAppWidth(), y + 10);
+        glColor3f(1.0, 1.0, 1.0);
+        renderText(textX, y - 4, 0, text, m_timeRatingFont);
+    }
 }
 
 void CGLView::drawDisplayText()
